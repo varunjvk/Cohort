@@ -5,7 +5,34 @@
 */
 
 function isAnagram(str1, str2) {
+  if (str1.length != str2.length) {
+    return false
+  }
 
+  let map1 = {}
+  
+  for (let char of str1.toLowerCase()) {
+    if (!(char in map1)) {
+      map1[char]=0
+    }
+    map1[char] += 1;
+  }
+
+  let map2 = {};
+
+  for (let char of str2.toLowerCase()) {
+    if (!(char in map2)) {
+      map2[char] = 0;
+    }
+    map2[char] += 1;
+  }
+
+  for (let char of str1) {
+    if (map1[char] != map2[char]) {
+      return false
+    }
+  }
+  return true
 }
 
 module.exports = isAnagram;
