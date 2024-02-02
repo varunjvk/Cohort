@@ -45,5 +45,81 @@
   const app = express();
   
   app.use(bodyParser.json());
+
+
+  let todos = []
+  
+app.get("/todos", (req, res) => {
+    res.status(200).json(todos)
+})
+  
+app.get("/todos/:id", (req, res) => {
+  const id = req.params.id
+  
+  const idx = todos.findIndex(t => t.id === parseInt(id))
+  
+  if (idx === -1) {
+    res.status(404).send()
+  }
+  else {
+    res.json(todos[idx])
+  }
+
+})
+
+app.post("/todos", (req, res) => {
+
+  const id = Math.floor(Math.random() * 100000)
+  
+  const obj = req.body
+  
+  const todo = {
+    id: id,
+    title: obj.title,
+    description: obj.description
+  }
+
+  todos.push(todo)
+
+  res.status(201).json(todo)
+
+
+})
+
+app.put("/todos/:id", (req, res) => {
+  const idx = todos.findIndex(item => parseInt(req.params.id) === item.id)
+
+  if (idx===-1) {
+    res.status(404).send()
+    return
+  }
+
+  
+  todos[idx].title = req.body.title
+  todos[idx].description = req.body.description
+  
+  res.json(todos[idx])
+  
+  
+})
+
+app.delete("/todos/:id", (req, res) => {
+  const idx = todos.findIndex(task => parseInt(req.params.id) === task.id)
+  
+  if (idx === -1) {
+    res.status(404).send()
+  }
+  else {
+    todos.splice(idx, 1)
+    res.status(200).send()
+  }
+
+})
+
+
+app.use((req, res, next) => {
+  res.status(404).send()
+})
+
   
   module.exports = app;
